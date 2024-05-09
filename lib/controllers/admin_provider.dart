@@ -1,5 +1,8 @@
+import 'dart:async';
+
 import 'package:admin/model%20copy/job_model.dart';
 import 'package:admin/model%20copy/menu_model.dart';
+import 'package:admin/model%20copy/user_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -94,8 +97,6 @@ class AdminProvider with ChangeNotifier {
             description: documentSnapshot.get('description') ?? "",
             id: documentSnapshot.id,
             type: documentSnapshot.get('type') ?? "",
-            subtype: documentSnapshot.get('subtype') ?? "",
-            salary: documentSnapshot.get('salary') ?? "",
             jobDetails: documentSnapshot.get('jobDetails') ?? "",
             companyImage: documentSnapshot.get('companyImage') ?? "",
             list: documentSnapshot.get('list') ?? [],
@@ -108,15 +109,34 @@ class AdminProvider with ChangeNotifier {
     });
   }
 
+  bool isNotice = false;
+  changeisNotice(bool value) {
+    isNotice = value;
+    notifyListeners();
+  }
+
+  DateTime? publisDate;
+
+  purplishDatePicker(BuildContext context) async {
+    DateTime? newDateTime = await showDatePicker(
+      initialDate: selectedDate,
+      firstDate: DateTime(1970),
+      lastDate: DateTime(2200),
+      context: context,
+    );
+    publisDate = newDateTime ?? DateTime.now();
+    notifyListeners();
+  }
+
   Future<bool> addNewJob({
     required String jobName,
     required String description,
     required String type,
     required String subtype,
     required String jobDetails,
-    required String salary,
     required String companyImage,
     required String link,
+    bool? isNotice = false,
   }) async {
     List image = [];
     for (int i = 0; i < selectedImageItem; i++) {
@@ -131,7 +151,6 @@ class AdminProvider with ChangeNotifier {
         "description": description,
         "type": type,
         "subtype": subtype,
-        "salary": salary,
         "jobDetails": jobDetails,
         "companyImage": companyImage,
         "list": image,
@@ -139,7 +158,8 @@ class AdminProvider with ChangeNotifier {
         "bookMark": [],
         "date": selectedDate,
         "deadline": deadline,
-        "popular": isPopuer
+        "popular": isPopuer,
+        "publishDate": publisDate,
       }).then((value) {
         print("-------${value.id}");
       });
@@ -186,7 +206,7 @@ class AdminProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  DateTime selectedDate = DateTime.now();
+  DateTime? selectedDate;
 
   datePicker(BuildContext context) async {
     DateTime? newDateTime = await showDatePicker(
@@ -199,7 +219,7 @@ class AdminProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  DateTime deadline = DateTime.now();
+  DateTime? deadline;
 
   deadlinePicker(BuildContext context) async {
     DateTime? newDateTime = await showDatePicker(
@@ -216,9 +236,7 @@ class AdminProvider with ChangeNotifier {
     required String jobName,
     required String description,
     required String type,
-    required String subtype,
     required String jobDetails,
-    required String salary,
     required String companyImage,
     required DateTime date,
     required String link,
@@ -234,8 +252,6 @@ class AdminProvider with ChangeNotifier {
       "name": jobName,
       "description": description,
       "type": type,
-      "subtype": subtype,
-      "salary": salary,
       "jobDetails": jobDetails,
       "companyImage": companyImage,
       "list": image,
@@ -264,9 +280,15 @@ class AdminProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  String selectedCategory = "";
+  String? selectedCategory;
   changeSelectedCategory(String value) {
     selectedCategory = value;
+    notifyListeners();
+  }
+
+  String? selectedSubType;
+  changeSubtype(String value) {
+    selectedSubType = value;
     notifyListeners();
   }
 
@@ -352,6 +374,26 @@ class AdminProvider with ChangeNotifier {
     menuSelectedIndex = index;
     notifyListeners();
   }
+StreamController<List<UserModel>> userController = StreamController<List<UserModel>>();
+Stream<List<UserModel>> getAllUserDetails() {
+  
+
+  FirebaseFirestore.instance.collection('users').snapshots().listen((snapshot) {
+    List<UserModel> users = [];
+    for (QueryDocumentSnapshot doc in snapshot.docs) {
+      users.add(UserModel(
+        userName: doc["userName"],
+        email: doc["email"],
+        userID: doc.id,
+      ));
+    }
+    userController.add(users);
+  }, onError: (error) {
+    print('Error fetching user details: $error');
+  });
+
+  return userController.stream;
+}
 
   List<String> Sidebar = [
     "DashBoard",

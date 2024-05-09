@@ -20,21 +20,23 @@ class MyFiles extends StatelessWidget {
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text(
-              "My Jobs",
-              style: Theme.of(context).textTheme.titleMedium,
+            Center(
+              child: Text(
+                "My Jobs",
+                style: Theme.of(context).textTheme.titleMedium,
+              ),
             ),
           ],
         ),
         SizedBox(height: defaultPadding),
         Responsive(
           mobile: FileInfoCardGridView(
-            crossAxisCount: _size.width < 650 ? 2 : 4,
-            childAspectRatio: _size.width < 650 && _size.width > 350 ? 1.3 : 1,
+            // crossAxisCount: _size.width < 650 ? 2 : 4,
+             childAspectRatio: _size.width < 650 && _size.width > 350 ? 1.3 : 1,
           ),
           tablet: FileInfoCardGridView(),
           desktop: FileInfoCardGridView(
-            childAspectRatio: _size.width < 1400 ? 1.1 : 1.4,
+            childAspectRatio: _size.width < 1400 ? 1.9 : 1.1,
           ),
         ),
       ],
@@ -45,7 +47,7 @@ class MyFiles extends StatelessWidget {
 class FileInfoCardGridView extends StatelessWidget {
   const FileInfoCardGridView({
     Key? key,
-    this.crossAxisCount = 4,
+    this.crossAxisCount = 1,
     this.childAspectRatio = 1,
   }) : super(key: key);
 
@@ -76,9 +78,12 @@ class FileInfoCardGridView extends StatelessWidget {
                 crossAxisCount: 2,
                 crossAxisSpacing: defaultPadding,
                 mainAxisSpacing: defaultPadding,
-                childAspectRatio: 1.5,
+               childAspectRatio: childAspectRatio
               ),
-              itemBuilder: (context, index) => FileInfoCard(model: snapshot.data![index],index: index,provider: provider,),
+              itemBuilder: (context, index) => Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: FileInfoCard(model: snapshot.data![index],index: index,provider: provider,),
+              ),
             );
         // Replace YourWidget with your actual UI code
     }

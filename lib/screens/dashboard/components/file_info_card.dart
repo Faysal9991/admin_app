@@ -25,7 +25,6 @@ class FileInfoCard extends StatelessWidget {
                 builder: (BuildContext context) {
                   return AlertDialog(
                     title: Text('Edit Post'),
-                 
                     actions: [
     ElevatedButton(
       style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
@@ -46,22 +45,13 @@ class FileInfoCard extends StatelessWidget {
                 },
               );
                 },
-      child: Container(
-        width: MediaQuery.of(context).size.width,
-        padding: EdgeInsets.all(defaultPadding),
-        decoration: BoxDecoration(
-          color: secondaryColor,
-          borderRadius: const BorderRadius.all(Radius.circular(10)),
-        ),
+      child: Card(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Row(
-              children: [
-                Container(
-                  padding: EdgeInsets.all(defaultPadding * 0.75),
-                  height: 50,
-                  width: 50,
+              Container(
+                 height: 150,
+                  width: double.infinity,
                   decoration: BoxDecoration(
                     borderRadius: const BorderRadius.all(Radius.circular(10)),
                   ),
@@ -70,37 +60,39 @@ class FileInfoCard extends StatelessWidget {
                     fit: BoxFit.cover,
                   ),
                 ),
-               Text(
-              model.name,
+                SizedBox(height: 10,),
+            Text( "Title : ${model.name}",
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                        SizedBox(height: 10,),
+             Text(
+              "Job Id : ${model.id}",
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
             ),
-               
-              ],
-            ),
+            SizedBox(height: 10,),
              Text(
-              "Job id = ${model.id}",
+            "Deadline : ${ DateFormat('dd-mm-yyyy').format(model.deadline.toDate())}",
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
+             
             ),
+            SizedBox(height: 10,),
+             Column(
+               children: [
+                 Text(
+                 'Description:\n ${ model.description}',
+                  maxLines: null,
+                  ),
+               ],
+             ),
+           SizedBox(height: 10,),
              Text(
-            "Deadline = ${ DateFormat('dd-mm-yyyy').format(model.deadline.toDate())}",
+              "Type: ${model.type}",
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
-              style: TextStyle(color: Colors.amber),
-            ),
-             Text(
-             ' job descreption ${ model.description}',
-              maxLines: 3,
-              overflow: TextOverflow.ellipsis,
-                style: TextStyle(color: Colors.green),
-            ),
-           
-             Text(
-              model.type,
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
-              style: TextStyle(color: Colors.red),
+             
             ),
           ],
         ),

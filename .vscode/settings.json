@@ -1,5 +1,18 @@
 {
     "cSpell.words": [
         "Jolie"
-    ]
+    ],
+    "spellright.language": [
+        "en"
+    ],
+    "spellright.documentTypes": [
+        "markdown",
+        "latex",
+        "plaintext"
+    ],
+    "spellright.parserByClass": {
+        "dart": {
+            "parser": "code"
+        }
+    }
 }

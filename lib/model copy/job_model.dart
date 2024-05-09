@@ -15,8 +15,6 @@ class JobModel {
     String description;
     String id;
     String type;
-    String subtype;
-    String salary;
     String jobDetails;
     String companyImage;
     List<dynamic> list;
@@ -30,8 +28,6 @@ class JobModel {
         required this.description,
         required this.id,
         required this.type,
-        required this.subtype,
-        required this.salary,
         required this.jobDetails,
         required this.companyImage,
         required this.list,
@@ -47,8 +43,6 @@ class JobModel {
         description: json["description"],
         id: json["id"],
         type: json["type"],
-        subtype: json["subtype"],
-        salary: json["salary"],
         jobDetails: json["jobDetails"],
         companyImage: json["companyImage"],
         list: List<dynamic>.from(json["list"].map((x) => x)),
@@ -64,8 +58,6 @@ class JobModel {
         "description": description,
         "id": id,
         "type": type,
-        "subtype": subtype,
-        "salary": salary,
         "jobDetails": jobDetails,
         "companyImage": companyImage,
         "list": List<dynamic>.from(list.map((x) => x)),
