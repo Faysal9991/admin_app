@@ -2,6 +2,7 @@ import 'package:admin/controllers/admin_provider.dart';
 import 'package:admin/screens/dashboard/components/custom_text.dart';
 import 'package:admin/screens/dashboard/components/storage_info_card.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -31,6 +32,7 @@ class _RecentFilesState extends State<RecentFiles> {
   TextEditingController title = TextEditingController();
   TextEditingController notificationDescription = TextEditingController();
   TextEditingController applying = TextEditingController();
+  TextEditingController buttonName = TextEditingController();
   Color textFieldColor = Color(0xff252329);
   @override
   Widget build(BuildContext context) {
@@ -114,16 +116,27 @@ class _RecentFilesState extends State<RecentFiles> {
                     const SizedBox(
                       height: 10,
                     ),
+
                     CustomTextField(
                         maxLines: null,
                         controller: applying,
                         hintText: "Please add a link youse can Apply",
                         borderRadius: 5,
                         fillColor: textFieldColor),
+
                     const SizedBox(
                       height: 10,
                     ),
-                      SizedBox(
+                    CustomTextField(
+                        maxLines: null,
+                        controller: buttonName,
+                        hintText: "please add button name",
+                        borderRadius: 5,
+                        fillColor: textFieldColor),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    SizedBox(
                         width: double.infinity,
                         child: ElevatedButton(
                           style: ButtonStyle(
@@ -135,12 +148,38 @@ class _RecentFilesState extends State<RecentFiles> {
                           onPressed: () {
                             provider.purplishDatePicker(context);
                           },
-                          child: Text(
-                           provider.publisDate==null?"Select Publish Date":   "Publish Date ${DateFormat('dd MMMM yyyy').format(provider.publisDate!)}"),
+                          child: Text(provider.publisDate == null
+                              ? "Select Publish Date"
+                              : "Publish Date ${DateFormat('dd MMMM yyyy').format(provider.publisDate!)}"),
                         )),
-                     provider.isNotice?SizedBox(height: 10,):SizedBox.shrink(),
-                   
-                     provider.isNotice?   SizedBox(
+                    provider.isNotice
+                        ? SizedBox(
+                            height: 10,
+                          )
+                        : SizedBox.shrink(),
+
+                    provider.isNotice
+                        ? SizedBox(
+                            width: double.infinity,
+                            child: ElevatedButton(
+                              style: ButtonStyle(
+                                  shape: MaterialStateProperty.all<
+                                          RoundedRectangleBorder>(
+                                      RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(7.0),
+                              ))),
+                              onPressed: () {
+                                provider.deadlinePicker(context);
+                              },
+                              child: Text(provider.deadline == null
+                                  ? "Select Deadline"
+                                  : "Select deadline ${DateFormat('dd MMMM yyyy').format(provider.deadline!)}"),
+                            ))
+                        : SizedBox.shrink(),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    SizedBox(
                         width: double.infinity,
                         child: ElevatedButton(
                           style: ButtonStyle(
@@ -150,29 +189,12 @@ class _RecentFilesState extends State<RecentFiles> {
                             borderRadius: BorderRadius.circular(7.0),
                           ))),
                           onPressed: () {
-                            provider.deadlinePicker(context);
+                            provider.datePicker(context);
                           },
-                          child: Text(
-                           provider.deadline==null?"Select Deadline":   "Select deadline ${DateFormat('dd MMMM yyyy').format(provider.deadline!)}"),
-                        )):SizedBox.shrink(),
-                     const SizedBox(
-                      height: 10,
-                    ),
-                      SizedBox(
-                         width: double.infinity,
-                        child: ElevatedButton(
-                              style: ButtonStyle(
-                              shape: MaterialStateProperty.all<
-                                      RoundedRectangleBorder>(
-                                  RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(7.0),))),
-                      onPressed: () {
-                        provider.datePicker(context);
-                      },
-                      child: Text(provider.selectedDate == null
-                          ? "Select sorting date"
-                          : "Select sorting date ${DateFormat('dd MMMM yyyy').format(provider.selectedDate!)}"),
-                    )),
+                          child: Text(provider.selectedDate == null
+                              ? "Select sorting date"
+                              : "Select sorting date ${DateFormat('dd MMMM yyyy').format(provider.selectedDate!)}"),
+                        )),
                     const SizedBox(
                       height: 10,
                     ),
@@ -190,21 +212,27 @@ class _RecentFilesState extends State<RecentFiles> {
                           } else {
                             return Container(
                               height: 35,
-                                width: double.infinity,
-                                decoration: BoxDecoration(borderRadius: BorderRadius.circular(7),color: textFieldColor,),
+                              width: double.infinity,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(7),
+                                color: textFieldColor,
+                              ),
                               child: Center(
                                 child: DropdownButton(
-                                  
                                   borderRadius: BorderRadius.circular(7),
                                   // Initial Value
                                   value: provider.selectedCategory,
-                                  hint: Text("please select category", style: Theme.of(context)
-                                .textTheme
-                                .bodyMedium!
-                                .copyWith(color: Theme.of(context).hintColor),),
+                                  hint: Text(
+                                    "please select category",
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .bodyMedium!
+                                        .copyWith(
+                                            color: Theme.of(context).hintColor),
+                                  ),
                                   // Down Arrow Icon
                                   icon: const Icon(Icons.keyboard_arrow_down),
-                                
+
                                   // Array list of items
                                   items: snapshot.data!.map((String items) {
                                     return DropdownMenuItem(
@@ -266,8 +294,6 @@ class _RecentFilesState extends State<RecentFiles> {
                     // SizedBox(
                     //   height: 10,
                     // ),
-               
-                  
 
                     Container(
                       height: 35,
@@ -327,10 +353,9 @@ class _RecentFilesState extends State<RecentFiles> {
                       width: double.infinity,
                       child: ElevatedButton(
                         style: ElevatedButton.styleFrom(
-                          disabledBackgroundColor: Colors.red,
+                            disabledBackgroundColor: Colors.red,
                             backgroundColor: Colors.green),
-                        onPressed:
-                        () {
+                        onPressed: () {
                           provider
                               .addNewJob(
                                   jobName: jobName.text,
@@ -339,7 +364,8 @@ class _RecentFilesState extends State<RecentFiles> {
                                   subtype: provider.selectedSubType.toString(),
                                   jobDetails: jobDetails.text,
                                   companyImage: companyImage.text,
-                                  link: applying.text)
+                                  link: applying.text,
+                                  batunName: buttonName.text)
                               .then((value) {
                             jobName.clear();
                             description.clear();
@@ -348,7 +374,10 @@ class _RecentFilesState extends State<RecentFiles> {
                             applying.clear();
                           });
                         },
-                        child: Text("Add Post",style: TextStyle(color: Colors.white),),
+                        child: Text(
+                          "Add Post",
+                          style: TextStyle(color: Colors.white),
+                        ),
                       ),
                     ),
                   ],

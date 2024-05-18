@@ -104,7 +104,8 @@ class AdminProvider with ChangeNotifier {
             popular: documentSnapshot.get('popular') ?? "",
             date: documentSnapshot.get('date') ?? "",
             deadline: documentSnapshot.get('deadline') ?? "",
-            bookMark: documentSnapshot.get('bookMark') ?? []);
+            bookMark: documentSnapshot.get('bookMark') ?? [],
+            battonName: documentSnapshot.get("batunName") ?? "");
       }).toList();
     });
   }
@@ -136,6 +137,7 @@ class AdminProvider with ChangeNotifier {
     required String jobDetails,
     required String companyImage,
     required String link,
+    required String batunName,
     bool? isNotice = false,
   }) async {
     List image = [];
@@ -160,6 +162,7 @@ class AdminProvider with ChangeNotifier {
         "deadline": deadline,
         "popular": isPopuer,
         "publishDate": publisDate,
+        "batunName": batunName,
       }).then((value) {
         print("-------${value.id}");
       });
@@ -374,26 +377,30 @@ class AdminProvider with ChangeNotifier {
     menuSelectedIndex = index;
     notifyListeners();
   }
-StreamController<List<UserModel>> userController = StreamController<List<UserModel>>();
-Stream<List<UserModel>> getAllUserDetails() {
-  
 
-  FirebaseFirestore.instance.collection('users').snapshots().listen((snapshot) {
-    List<UserModel> users = [];
-    for (QueryDocumentSnapshot doc in snapshot.docs) {
-      users.add(UserModel(
-        userName: doc["userName"],
-        email: doc["email"],
-        userID: doc.id,
-      ));
+  List<UserModel> users = [];
+  getAllUserDetails() async {
+    EasyLoading.showInfo('Loading!');
+    users.clear();
+    try {
+      QuerySnapshot querySnapshot =
+          await FirebaseFirestore.instance.collection('users').get();
+
+      for (QueryDocumentSnapshot doc in querySnapshot.docs) {
+        UserModel user = UserModel(
+          userName: doc["userName"],
+          email: doc["email"],
+          userID: doc.id,
+        );
+
+        users.add(user);
+      }
+    } catch (e) {
+      EasyLoading.showError("${e}");
     }
-    userController.add(users);
-  }, onError: (error) {
-    print('Error fetching user details: $error');
-  });
-
-  return userController.stream;
-}
+    EasyLoading.dismiss();
+    notifyListeners();
+  }
 
   List<String> Sidebar = [
     "DashBoard",
@@ -401,6 +408,6 @@ Stream<List<UserModel>> getAllUserDetails() {
     "Notice post",
     "post category",
     "Post sidebar",
-    "search Job"
+    "view JobS"
   ];
 }

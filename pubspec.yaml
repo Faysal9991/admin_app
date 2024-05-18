@@ -46,6 +46,7 @@ dependencies:
   flutter_rounded_date_picker: ^3.0.4
   intl: ^0.19.0
   sidebarx: ^0.17.1
+  flutter_side_menu: ^0.4.0
 dev_dependencies:
   flutter_test:
     sdk: flutter

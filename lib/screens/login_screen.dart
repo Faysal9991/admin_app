@@ -26,65 +26,65 @@ class _LoginScreenState extends State<LoginScreen> {
   Widget build(BuildContext context) {
     return Consumer<AdminProvider>(builder: (context, provider, child) {
       return Scaffold(
-        body:  Center(
-                child: SingleChildScrollView(
-                  child: Container(
-                    width: MediaQuery.of(context).size.width > 600 ? 400 : null,
-                    padding: EdgeInsets.all(20.0),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
-                      children: <Widget>[
-                        Text(
-                          'Login',
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                            fontSize: 32.0,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        SizedBox(height: 20.0),
-                        CustomTextField(
-                          controller: email,
-                         hintText: "Email",
-                        ),
-                        SizedBox(height: 10.0),
-                        TextFormField(
-                          controller: password,
-                          obscureText: true,
-                          decoration: InputDecoration(
-                            labelText: 'Password',
-                            border: OutlineInputBorder(),
-                          ),
-                        ),
-                        SizedBox(height: 20.0),
-                        ElevatedButton(
-                          onPressed: () {
-                             provider.saveData(true);
-                              Navigator.pushReplacementNamed(
-                                    context, '/menu');
-                            if (email.text.isNotEmpty &&
-                                email.text == "admin@gmail.bd.gausi.com") {
-                              if (password.text.isNotEmpty &&
-                                  password.text == "01999gausi.com@bd.login") {
-                               
-                                Navigator.pushReplacementNamed(
-                                    context, '/menu');
-                                EasyLoading.showSuccess("thanks");
-                              } else {
-                                EasyLoading.showError("invalid password");
-                              }
-                            } else {
-                              EasyLoading.showError("invalid email");
-                            }
-                          },
-                          child: Text('Login'),
-                        ),
-                      ],
+        body: Center(
+          child: SingleChildScrollView(
+            child: Container(
+              width: MediaQuery.of(context).size.width > 600 ? 400 : null,
+              padding: EdgeInsets.all(20.0),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: <Widget>[
+                  Text(
+                    'Login',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      fontSize: 32.0,
+                      fontWeight: FontWeight.bold,
                     ),
                   ),
-                ),
+                  SizedBox(height: 20.0),
+                  TextFormField(
+                    controller: email,
+                    obscureText: true,
+                    decoration: InputDecoration(
+                      labelText: 'Email',
+                      border: OutlineInputBorder(),
+                    ),
+                  ),
+                  SizedBox(height: 10.0),
+                  TextFormField(
+                    controller: password,
+                    obscureText: true,
+                    decoration: InputDecoration(
+                      labelText: 'Password',
+                      border: OutlineInputBorder(),
+                    ),
+                  ),
+                  SizedBox(height: 20.0),
+                  ElevatedButton(
+                    onPressed: () {
+                      if (email.text.isNotEmpty &&
+                          email.text == "admin@gmail.bd.gausi.com") {
+                        if (password.text.isNotEmpty &&
+                            password.text == "01999gausi.com@bd.login") {
+                          Navigator.pushReplacementNamed(context, '/menu');
+                          provider.saveData(true);
+                          EasyLoading.showSuccess("thanks");
+                        } else {
+                          EasyLoading.showError("invalid password");
+                        }
+                      } else {
+                        EasyLoading.showError("invalid email");
+                      }
+                    },
+                    child: Text('Login'),
+                  ),
+                ],
               ),
+            ),
+          ),
+        ),
       );
     });
   }

@@ -7,6 +7,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:flutter_side_menu/flutter_side_menu.dart';
 import 'package:provider/provider.dart';
 import '../../constants.dart';
 import 'components/recent_files.dart';
@@ -24,16 +25,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
   TextEditingController UpdateMenuDetails = TextEditingController();
   @override
   void initState() {
-    Provider.of<AdminProvider>(context, listen: false).getData();
+    // Provider.of<AdminProvider>(context, listen: false).getData();
     Provider.of<AdminProvider>(context, listen: false).getAllUserDetails();
     super.initState();
-  }
-
-  @override
-  void dispose() {
-    // TODO: implement dispose
-    Provider.of<AdminProvider>(context, listen: false).userController.onCancel;
-    super.dispose();
   }
 
   @override
@@ -54,127 +48,150 @@ class _DashboardScreenState extends State<DashboardScreen> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: [
-                          Expanded(
-                              flex: 1,
-                              child: ListView.builder(
-                                  padding: EdgeInsets.zero,
-                                  physics: NeverScrollableScrollPhysics(),
-                                  shrinkWrap: true,
-                                  itemCount: admin.Sidebar.length,
-                                  itemBuilder: ((context, index) {
-                                    return InkWell(
-                                      onTap: () {
-                                        admin.changeSelectedIndex(index);
-                                        admin.menuSelectedIndex == 2
-                                            ? admin.changeisNotice(false)
-                                            : admin.changeisNotice(true);
-                                      },
-                                      child: Container(
-                                        height: 50,
-                                        decoration: BoxDecoration(
-                                            borderRadius:
-                                                BorderRadius.circular(10),
-                                            color:
-                                                admin.menuSelectedIndex == index
-                                                    ? Colors.white
-                                                    : Colors.pinkAccent,
-                                            border: Border(
-                                              bottom: BorderSide(
-                                                color: Colors.black
-                                                    .withOpacity(0.5),
-                                                width: 1.0,
-                                              ),
-                                            )),
-                                        child: Padding(
-                                          padding: const EdgeInsets.all(8.0),
-                                          child: Center(
-                                              child: Text(
-                                            "${admin.Sidebar[index]}",
-                                            style: TextStyle(
-                                                color:
-                                                    admin.menuSelectedIndex ==
-                                                            index
-                                                        ? Colors.green
-                                                        : Colors.white),
-                                          )),
-                                        ),
-                                      ),
-                                    );
-                                  }))),
+                          SideMenu(
+                            builder: (data) => SideMenuData(
+                              header: Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: const Text('Options'),
+                              ),
+                              items: [
+                                SideMenuItemDataTile(
+                                  isSelected: admin.menuSelectedIndex == 0
+                                      ? true
+                                      : false,
+                                  onTap: () {
+                                    admin.changeSelectedIndex(0);
+                                    admin.menuSelectedIndex == 2
+                                        ? admin.changeisNotice(false)
+                                        : admin.changeisNotice(true);
+                                  },
+                                  title: '${admin.Sidebar[0]}',
+                                  icon: const Icon(Icons.home),
+                                ),
+                                SideMenuItemDataTile(
+                                  isSelected: admin.menuSelectedIndex == 1
+                                      ? true
+                                      : false,
+                                  onTap: () {
+                                    admin.changeSelectedIndex(1);
+                                    admin.menuSelectedIndex == 2
+                                        ? admin.changeisNotice(false)
+                                        : admin.changeisNotice(true);
+                                  },
+                                  title: '${admin.Sidebar[1]}',
+                                  icon: const Icon(Icons.post_add),
+                                ),
+                                SideMenuItemDataTile(
+                                  isSelected: admin.menuSelectedIndex == 2
+                                      ? true
+                                      : false,
+                                  onTap: () {
+                                    admin.changeSelectedIndex(2);
+                                    admin.menuSelectedIndex == 2
+                                        ? admin.changeisNotice(false)
+                                        : admin.changeisNotice(true);
+                                  },
+                                  title: '${admin.Sidebar[2]}',
+                                  icon: const Icon(Icons.notification_add),
+                                ),
+                                SideMenuItemDataTile(
+                                  isSelected: admin.menuSelectedIndex == 3
+                                      ? true
+                                      : false,
+                                  onTap: () {
+                                    admin.changeSelectedIndex(3);
+                                    admin.menuSelectedIndex == 2
+                                        ? admin.changeisNotice(false)
+                                        : admin.changeisNotice(true);
+                                  },
+                                  title: '${admin.Sidebar[3]}',
+                                  icon: const Icon(Icons.category),
+                                ),
+                                SideMenuItemDataTile(
+                                  isSelected: admin.menuSelectedIndex == 4
+                                      ? true
+                                      : false,
+                                  onTap: () {
+                                    admin.changeSelectedIndex(4);
+                                    admin.menuSelectedIndex == 2
+                                        ? admin.changeisNotice(false)
+                                        : admin.changeisNotice(true);
+                                  },
+                                  title: '${admin.Sidebar[4]}',
+                                  icon: const Icon(Icons.view_sidebar),
+                                ),
+                                SideMenuItemDataTile(
+                                  isSelected: admin.menuSelectedIndex == 5
+                                      ? true
+                                      : false,
+                                  onTap: () {
+                                    admin.changeSelectedIndex(5);
+                                    admin.menuSelectedIndex == 2
+                                        ? admin.changeisNotice(false)
+                                        : admin.changeisNotice(true);
+                                  },
+                                  title: '${admin.Sidebar[5]}',
+                                  icon: const Icon(Icons.view_agenda),
+                                ),
+                              ],
+                            ),
+                          ),
                           admin.menuSelectedIndex == 0
                               ? Expanded(
-                                  flex: 2,
+                                  flex: 4,
                                   child: Column(
                                     children: [
-                                      StreamBuilder<List<UserModel>>(
-                                          stream: admin.getAllUserDetails(),
-                                          builder: (context, snapshot) {
-                                            if (snapshot.connectionState ==
-                                                ConnectionState.waiting) {
-                                              // While the future is still loading, return a loading indicator or placeholder.
-                                              return SizedBox
-                                                  .shrink(); // Example loading indicator
-                                            } else if (snapshot.hasError) {
-                                              // If the future throws an error, display an error message.
-                                              return Text(
-                                                  'Error: ${snapshot.error}');
-                                            } else {
-                                              return Column(
-                                                children: [
-                                                  Card(
-                                                    child: Padding(
-                                                      padding:
-                                                          const EdgeInsets.all(
-                                                              20.0),
-                                                      child: Text(
-                                                          "Total User: ${snapshot.data!.length}"),
+                                      Column(
+                                        children: [
+                                          Card(
+                                            child: Padding(
+                                              padding:
+                                                  const EdgeInsets.all(20.0),
+                                              child: Text(
+                                                  "Total User: ${admin.users.length}"),
+                                            ),
+                                          ),
+                                          ListView.builder(
+                                              shrinkWrap: true,
+                                              physics:
+                                                  NeverScrollableScrollPhysics(),
+                                              itemCount: admin.users.length,
+                                              itemBuilder: (context, index) {
+                                                return Card(
+                                                  child: Padding(
+                                                    padding:
+                                                        const EdgeInsets.all(
+                                                            8.0),
+                                                    child: Column(
+                                                      children: [
+                                                        Row(
+                                                          children: [
+                                                            Expanded(
+                                                              child: Text(
+                                                                  "User name : ${admin.users[index].userName}"),
+                                                            ),
+                                                            Expanded(
+                                                              child: Text(
+                                                                  "User email : ${admin.users[index].email}"),
+                                                            ),
+                                                            Expanded(
+                                                              child: Text(
+                                                                  "User ID : ${admin.users[index].userID}"),
+                                                            ),
+                                                          ],
+                                                        )
+                                                      ],
                                                     ),
                                                   ),
-                                                  ListView.builder(
-                                                      shrinkWrap: true,
-                                                      physics:
-                                                          NeverScrollableScrollPhysics(),
-                                                      itemCount:
-                                                          snapshot.data!.length,
-                                                      itemBuilder:
-                                                          (context, index) {
-                                                        return Card(
-                                                          child: Padding(
-                                                            padding:
-                                                                const EdgeInsets
-                                                                    .all(8.0),
-                                                            child: Column(
-                                                              children: [
-                                                                Row(
-                                                                  children: [
-                                                                    Expanded(
-                                                                      child: Text(
-                                                                          "User name : ${snapshot.data![index].userName}"),
-                                                                    ),
-                                                                    Expanded(
-                                                                      child: Text(
-                                                                          "User email : ${snapshot.data![index].email}"),
-                                                                    ),
-                                                                    Expanded(
-                                                                      child: Text(
-                                                                          "User ID : ${snapshot.data![index].userID}"),
-                                                                    ),
-                                                                  ],
-                                                                )
-                                                              ],
-                                                            ),
-                                                          ),
-                                                        );
-                                                      }),
-                                                ],
-                                              );
-                                            }
-                                          }),
+                                                );
+                                              }),
+                                        ],
+                                      )
                                     ],
                                   ))
                               : admin.menuSelectedIndex == 1
                                   ? Expanded(
-                                      flex: 2,
+                                      flex: 4,
                                       child: Column(
                                         children: [
                                           SizedBox(height: defaultPadding),
@@ -184,7 +201,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                     )
                                   : admin.menuSelectedIndex == 2
                                       ? Expanded(
-                                          flex: 2,
+                                          flex: 4,
                                           child: Column(
                                             children: [
                                               SizedBox(height: defaultPadding),
@@ -194,10 +211,12 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                         )
                                       : admin.menuSelectedIndex == 3
                                           ? Expanded(
+                                              flex: 4,
                                               child: CategoryDetails(),
                                             )
                                           : admin.menuSelectedIndex == 4
                                               ? Expanded(
+                                                  flex: 4,
                                                   child:
                                                       Consumer<AdminProvider>(
                                                           builder: (context,
@@ -391,7 +410,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                                   }),
                                                 )
                                               : Expanded(
-                                                  flex: 2, child: MyFiles()),
+                                                  flex: 4, child: MyFiles()),
                         ])
                   ],
                 ),
